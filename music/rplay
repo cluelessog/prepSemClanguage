@@ -1,0 +1,36 @@
+#!/bin/bash
+if [ $WAVPLAYER"missing" == "missing" ]
+then
+    PLAYER=play
+else
+    PLAYER=$WAVPLAYER
+fi
+
+SKIP=0
+AMPLITUDE=1
+#!/bin/bash
+# Argument = -t test -r server -p password -v
+
+usage()
+{
+cat << EOF
+usage: $0 RRA_FILENAME
+
+This script plays one RRA audio file by converting it to a WAV file.
+
+dependencies:
+    Sox must be installed: sudo apt-get install sox
+    Python3 must be installed
+    The Python3 program rra2wav must be in the current directory
+        (or otherwise reachable by Python)
+EOF
+}
+
+echo playing $1 with rra2wav.py...
+if [ $PLAYER == play ]
+then
+    python3 rra2wav.py $1 | $PLAYER -t wav -
+else
+    name=`basename $1 .rra`
+    python3 rra2wav.py $1 $name.wav; $PLAYER $name.wav
+fi
